@@ -1,0 +1,13 @@
+﻿  Plane.cpp
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,45): warning C4244:  'argument': conversion from 'float' to '_Ty', possible loss of data
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,45): warning C4244:         with
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,45): warning C4244:         [
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,45): warning C4244:             _Ty=int
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,45): warning C4244:         ]
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,40): warning C4244:  'argument': conversion from 'float' to '_Ty', possible loss of data
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,40): warning C4244:         with
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,40): warning C4244:         [
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,40): warning C4244:             _Ty=int
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(11,40): warning C4244:         ]
+C:\Users\walsht\Desktop\TerrainShaderized\Plane.cpp(91,33): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+  TerrainShaderized.vcxproj -> C:\Users\walsht\Desktop\TerrainShaderized\Debug\TerrainShaderized.exe
