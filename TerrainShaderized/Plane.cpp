@@ -1,6 +1,4 @@
 #include "Plane.h"
-
-
 std::random_device randomDevice;
 std::mt19937 gen(randomDevice());
 
@@ -21,18 +19,9 @@ Plane::Plane(float randMax, float soft, std::string texName, int type)
 	this->softness = soft;
 	this->randMax = randMax;
 
-	for (int x = 0; x < MapSize; x++)
-	{
-		for (int z = 0; z < MapSize; z++)
-		{
-			if (x == 0 && z == 0 || x == MapSize - 1 && z == 0 || x == MapSize - 1 && z == MapSize - 1 || x == 0 && z == MapSize - 1) {
-				terrain[x][z] = randomGen(-this->randMax, this->randMax);
-			}
-			else {
-				terrain[x][z] = 0;
-			}
-		}
-	}
+	
+	initHeight();
+	
 	if (type == 0) {
 		this->loadTexture(Count, this->texName);
 		this->textureIDs.push_back(Count);
@@ -53,6 +42,21 @@ Plane::Plane(float randMax, float soft, std::string texName, int type)
 
 Plane::~Plane()
 {
+}
+
+void Plane::initHeight() {
+	for (int x = 0; x < MapSize; x++)
+	{
+		for (int z = 0; z < MapSize; z++)
+		{
+			if (x == 0 && z == 0 || x == MapSize - 1 && z == 0 || x == MapSize - 1 && z == MapSize - 1 || x == 0 && z == MapSize - 1) {
+				terrain[x][z] = randomGen(-this->randMax, this->randMax);
+			}
+			else {
+				terrain[x][z] = 0;
+			}
+		}
+	}
 }
 
 void Plane::loadTexture(int textureID, std::string name)
@@ -77,6 +81,8 @@ void Plane::loadTexture(int textureID, std::string name)
 
 void Plane::calcHeight()
 {
+
+	this->stepSize = MapSize - 1;
 	while (this->stepSize > 1) {
 		for (int x = 0; x < MapSize - 1; x += this->stepSize) {
 			for (int y = 0; y < MapSize - 1; y += this->stepSize) {

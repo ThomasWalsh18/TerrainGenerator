@@ -3,6 +3,7 @@ const int MapSize = 65;
 static unsigned int vao, buffer;
 static int Count = 0;
 
+
 /*
 float random(float min) {
 	int max = min * -2000.0f;

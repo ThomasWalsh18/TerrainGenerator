@@ -24,6 +24,7 @@ public:
 	float randomGen(float min, float max);
 	Plane(float randMax, float soft, std::string texName, int type);
 	~Plane();
+	void initHeight();
 	void loadTexture(int textureID, std::string name);
 	void calcHeight();
 	void Dimondstep(int x, int z);
@@ -32,8 +33,8 @@ public:
 	void normalCalc();
 	void setupShaders();
 	void draw();
+
 	float AdvSurroundPoints(int midX, int midZ);
-	
 	Vertex terrainVertices[MapSize * MapSize] = {};
 	float terrain[MapSize][MapSize] = {};
 	int terrainIndexData[MapSize - 1][2 * MapSize] = {};
