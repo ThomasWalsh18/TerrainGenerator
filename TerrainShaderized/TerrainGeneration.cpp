@@ -58,9 +58,7 @@ static const Light light0 = {
 	vec4(1.0f, 1.0f, 1.0f, 1.0f),
 	vec4(1.0f, 10.0f, 0.0f, 0.0f)
 };
-
 // Globals
-unsigned int skyboxVAO, skyboxVBO;
 
 // Size of the terrain
 //2^n +1
@@ -106,14 +104,14 @@ int newTimeSinceStart;
 vector<Plane*> terrains;
 vector<Tree*> trees;
 
-int maxTrees = 40;
+vector<std::string> Skyfilenames;
 
 float random(float min, float max) {
 	float random = ((float)rand()) / RAND_MAX;
 	float range = max - min;
 	return (random * range) + min;
 }
-
+//http://www.custommapmakers.org/skyboxes.php, http://www.mbsoftworks.sk/tutorials/opengl4/017-heightmap-pt2-from-image-and-skybox/
 void mouseMove(int x, int y)
 {
 	if (firstMouse)
@@ -205,6 +203,7 @@ void setup(void)
 		terrains[i]->initVertexArray();
 		terrains[i]->normalCalc();
 	}
+
 	float percentage = 60.6f;
 	float randomNum;
 	for (int i = 0; i < MapSize * MapSize; i++){
@@ -228,7 +227,7 @@ void setup(void)
 		trees[i]->createTree();
 		trees[i]->buildIndex();
 	}
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+	glClearColor(0.1, 0.4, 1.0, 0.0);
 
 	// Create shader program executable - read, compile and link shaders
 	char* vertexShader = readTextFile("vertexShader.glsl");
@@ -267,7 +266,7 @@ void setup(void)
 	glUniform4fv(glGetUniformLocation(programId, "light0.specCols"), 1, &light0.specCols[0]);
 	glUniform4fv(glGetUniformLocation(programId, "light0.coords"), 1, &light0.coords[0]);
 	/////////////////////////
-
+	
 	for (int i = 0; i < terrains.size(); i++) {
 		terrains[i]->setupShaders();
 	}
@@ -313,7 +312,6 @@ void drawScene(void)
 	else {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
-
 	// For each row - draw the triangle strip
 	int type = 0;
 	for (int i = 0; i < terrains.size(); i++) {

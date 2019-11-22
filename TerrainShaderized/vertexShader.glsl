@@ -41,9 +41,11 @@ void main(void)
 		//pos.y += 0.1f * cos(pos.z + time);
 		pos.y += 0.2f * (sin(pos.x + time) + cos(pos.z + time));
 	}
+		
 	normalExport = terrainNormals;
 	//normalExport = normalize(normalMat * normalExport);
 	texCoordsExport = terrainTexCoords;
 	gl_Position = projMat * viewMat * modelMat * pos;
+	
  
 }
