@@ -1,29 +1,10 @@
-﻿  Plane.cpp
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,45): warning C4244:  'argument': conversion from 'float' to '_Ty', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,45): warning C4244:         with
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,45): warning C4244:         [
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,45): warning C4244:             _Ty=int
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,45): warning C4244:         ]
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,40): warning C4244:  'argument': conversion from 'float' to '_Ty', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,40): warning C4244:         with
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,40): warning C4244:         [
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,40): warning C4244:             _Ty=int
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(9,40): warning C4244:         ]
-  TerrainGeneration.cpp
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Plane.cpp(97,33): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(113,11): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(114,11): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(120,10): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(121,10): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(146,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(147,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(151,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(152,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(191,49): warning C4316:  'Plane': object allocated on the heap may not be aligned 16
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(192,44): warning C4316:  'Plane': object allocated on the heap may not be aligned 16
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(195,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(241,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(286,20): warning C4018:  '<': signed/unsigned mismatch
-  Generating Code...
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(327,19): warning C4305:  '+=': truncation from 'double' to 'float'
-  TerrainShaderized.vcxproj -> C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Debug\TerrainShaderized.exe
+﻿  Tree.cpp
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(15,25): warning C4244:  '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(101,29): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(102,29): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(108,16): warning C4101:  'z2': unreferenced local variable
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(154,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(161,36): warning C4305:  '=': truncation from 'double' to 'float'
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(162,36): warning C4305:  '=': truncation from 'double' to 'float'
+C:\Users\walsht\Desktop\322\TerrainShaderized\Tree.cpp(163,37): warning C4305:  '=': truncation from 'double' to 'float'
+  TerrainShaderized.vcxproj -> C:\Users\walsht\Desktop\322\TerrainShaderized\Debug\TerrainShaderized.exe

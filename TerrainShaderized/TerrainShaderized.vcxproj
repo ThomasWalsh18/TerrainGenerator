@@ -87,6 +87,7 @@
     <ClCompile Include="getbmp.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="TerrainGeneration.cpp" />
+    <ClCompile Include="Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="fragmentShader.glsl" />
@@ -96,6 +97,7 @@
     <ClInclude Include="getbmp.h" />
     <ClInclude Include="Contoller.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

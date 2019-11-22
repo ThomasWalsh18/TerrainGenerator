@@ -17,7 +17,7 @@ uniform float time;
 out vec3 normalExport;
 out vec2 texCoordsExport;
 out flat int Exportype;
-out flat float yheight;
+out vec4 yheight;
 
 
 void main(void)
@@ -25,7 +25,9 @@ void main(void)
 	Exportype = type;
 	vec4 pos;
 	pos = terrainCoords;
-	yheight = pos.y;
+	if (type == 0){
+		yheight = pos;
+	}
 	if (type == 1){
 		//float amplitude = 1.;
 		//float frequency = 1.;

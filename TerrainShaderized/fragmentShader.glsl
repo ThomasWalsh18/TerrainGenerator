@@ -3,7 +3,7 @@
 in vec3 normalExport;
 in vec2 texCoordsExport;
 in flat int Exportype;
-in flat float yheight;
+in vec4 yheight;
 
 out vec4 colorsExport;
 
@@ -44,32 +44,32 @@ void main(void)
 	vec4 snowTexColor = texture(snowTex, texCoordsExport);
 	
 	if (Exportype == 0){
-		if (yheight < 4.0f)
+		if (yheight.y <= 3.0f)
 		{
-			if (yheight > 3.5f)
+			if (yheight.y >= 2.0f)
 			{
-				texcol = mix(fieldTexColor, mudTexColor, 0.5f);
+				texcol = mix(fieldTexColor, mudTexColor, yheight.y / 10);
 			} 
 			else
 			{
 				texcol = mudTexColor;
 			}
 		} 
-		else if (yheight > 4.0f)
+		else if (yheight.y >= 3.0f && yheight.y <=8.0f)
 		{
-			if (yheight < 5.5f){
-				texcol = mix(snowTexColor, fieldTexColor, 0.5f);
+			if (yheight.y <= 7.0f)
+			{
+				texcol = fieldTexColor;	
 			} 
 			else
 			{
-				texcol = snowTexColor;
+				texcol = mix(snowTexColor, fieldTexColor, yheight.y / 10);
 			}
 		}
 		else
 		{
-			texcol = fieldTexColor;
+			texcol = snowTexColor;
 		}
-
 	}
 	else 
 	{
@@ -79,5 +79,12 @@ void main(void)
 	normal = normalize(normalExport);
 	lightDirection = normalize(vec3(light0.coords));
 	fAndBDif = max(dot(normal, lightDirection), 0.0f) * (light0.difCols * terrainFandB.difRefl); 
-	colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0)* texcol * fAndBDif;  
+	if (Exportype == 1){
+		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0f) * texcol * fAndBDif;  
+		colorsExport.a = 0.6f;
+	}
+	else {
+		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0) * texcol * fAndBDif;  
+		colorsExport.a = 1.0f;
+	}
 }

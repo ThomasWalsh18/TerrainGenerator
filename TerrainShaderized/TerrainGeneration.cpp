@@ -2,13 +2,14 @@
 #include <fstream>
 #include <vector>
 #include "getbmp.h"
-#include "Plane.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-
+#include <time.h>
+#include "Tree.h"
+#include "Plane.h"
 #pragma comment(lib, "glew32.lib") 
 
 using namespace std;
@@ -65,7 +66,6 @@ unsigned int skyboxVAO, skyboxVBO;
 //2^n +1
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
-static BitMapFile* image;
 
 static mat4 projMat = mat4(1.0);
 static mat3 normalMat = mat3(1.0);
@@ -73,8 +73,6 @@ static mat4 viewMat(1.0f);;
 static mat4 modelMat(1.0f); // Identity matrix  4 x 4
 
 static const vec4 globAmb = vec4(0.2f, 0.2f, 0.2f, 1.0f);
-
-bool debugMode = false;
 
 static unsigned int
 programId,
@@ -89,6 +87,7 @@ texture[1],
 grassTexLoc,
 rockTexLoc;
 
+bool debugMode = false;
 float speed = 3;
 vec3 los = glm::vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -105,6 +104,7 @@ float deltaTime = 0.0f;
 int oldTimeSinceStart;
 int newTimeSinceStart;
 vector<Plane*> terrains;
+vector<Tree*> trees;
 
 void mouseMove(int x, int y)
 {
@@ -116,11 +116,11 @@ void mouseMove(int x, int y)
 	}
 
 	float xoffset = x - lastX;
-	float yoffset = lastY - y; 
+	float yoffset = lastY - y;
 	lastX = x;
 	lastY = y;
 
-	float sensitivity = 0.3f; 
+	float sensitivity = 0.3f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
@@ -187,7 +187,7 @@ void shaderCompileTest(GLuint shader)
 // Initialization routine.
 void setup(void)
 {
-
+	srand(time(NULL));
 	Plane* terrain = new Plane(30, 1.5f, "rock", 0);
 	Plane* water = new Plane(2, 1, "water", 1);
 	terrains.push_back(terrain);
@@ -198,6 +198,16 @@ void setup(void)
 		terrains[i]->normalCalc();
 	}
 
+	for (int i = 0; i < MapSize * MapSize; i++){
+		if (terrains[0]->terrainVertices[i].coords.y > 6 && terrains[0]->terrainVertices[i].coords.y < 7) {
+			Tree* temp = new Tree(glm::vec3(terrains[0]->terrainVertices[i].coords.x, terrains[0]->terrainVertices[i].coords.y, terrains[0]->terrainVertices[i].coords.z));
+			trees.push_back(temp);
+		}
+	}
+	for (int i = 0; i < trees.size(); i++) {
+		trees[i]->createTree();
+		trees[i]->buildIndex();
+	}
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 
 	// Create shader program executable - read, compile and link shaders
@@ -241,7 +251,9 @@ void setup(void)
 	for (int i = 0; i < terrains.size(); i++) {
 		terrains[i]->setupShaders();
 	}
-	
+	for (int i = 0; i < trees.size(); i++) {
+		trees[i]->setupShaders();
+	}
 
 	/////////////////////////
 	// Obtain projection matrix uniform location and set value.
@@ -269,6 +281,7 @@ void setup(void)
 void drawScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glEnable(GL_POLYGON_SMOOTH);
 	//glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	
 	viewMat = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
@@ -298,7 +311,11 @@ void drawScene(void)
 		terrains[i]->draw();
 		type++;
 	}
-	// here
+	type = 3;
+	for (int i = 0; i < trees.size(); i++) {
+		glUniform1i(glGetUniformLocation(programId, "type"), type);
+		trees[i]->draw();
+	}
 
 	glutSwapBuffers();
 }
@@ -310,17 +327,9 @@ void resize(int w, int h)
 }
 
 void idle() {
-	/*
-	oldTimeSinceStart = newTimeSinceStart;
-	newTimeSinceStart = glutGet(GLUT_ELAPSED_TIME);
-	deltaTime = newTimeSinceStart - oldTimeSinceStart;
-	//If the last frame was rendered less than 1 ms ago, the detalaTime will be 0 ms. This causes problems in calculations, so sleep for 1ms to adjust.
-	if (deltaTime == 0) {
-		Sleep(1);
-		newTimeSinceStart = glutGet(GLUT_ELAPSED_TIME);
-		deltaTime = newTimeSinceStart - oldTimeSinceStart;
-	}
-	 */
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (deltaTime > 360.0f) {
 		deltaTime = 0.0f;
 	}
@@ -348,6 +357,11 @@ void keyInput(unsigned char key, int x, int y)
 		break;
 	case 'c':
 		debugMode = !debugMode;
+		break;	
+	case 'r':
+		srand(time(NULL));
+		terrains[0]->calcHeight();
+	
 		break;
 	case 27:
 		exit(0);

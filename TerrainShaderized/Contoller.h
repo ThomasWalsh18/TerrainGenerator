@@ -1,7 +1,8 @@
 #pragma once
 const int MapSize = 65;
-static unsigned int vao, buffer;
+//static unsigned int vao, buffer;
 static int Count = 0;
+const int NUMPOINTS = 1000;
 
 
 /*

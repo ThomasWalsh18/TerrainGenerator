@@ -1,15 +1,18 @@
 #include "Plane.h"
-std::random_device randomDevice;
-std::mt19937 gen(randomDevice());
 
 float Plane::randomGen(float min, float max)
 {
+	/*
 	min = min * 1000.0f;
 	max = max * 1000.0f;
 	std::uniform_int_distribution<> range(min, max);
 	float number = range(gen) / 1000.0f;
 	//std::cout << "Random number between " << min << " & " << max << " is: " << number << std::endl;
 	return number;
+	*/
+	float random = ((float)rand()) / RAND_MAX;
+	float range = max - min;
+	return (random * range) + min;
 }
 
 Plane::Plane(float randMax, float soft, std::string texName, int type)
@@ -160,6 +163,7 @@ void Plane::initVertexArray() {
 			this->terrainVertices[i].normals = glm::vec3(0, 0, 0);
 			float fScaleC = float(z) / float(MapSize - 1);
 			float fScaleR = float(x) / float(MapSize - 1);
+			
 			this->terrainVertices[i].texcoords = glm::vec2(fTextureS * fScaleC, fTextureT * fScaleR);
 
 			i++;
