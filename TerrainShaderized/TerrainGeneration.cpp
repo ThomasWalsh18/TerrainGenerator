@@ -105,6 +105,9 @@ int oldTimeSinceStart;
 int newTimeSinceStart;
 vector<Plane*> terrains;
 vector<Tree*> trees;
+
+int maxTrees = 40;
+
 float random(float min, float max) {
 	float random = ((float)rand()) / RAND_MAX;
 	float range = max - min;
@@ -193,7 +196,7 @@ void shaderCompileTest(GLuint shader)
 void setup(void)
 {
 	srand(time(NULL));
-	Plane* terrain = new Plane(30, 1.5f, "rock", 0);
+	Plane* terrain = new Plane(30, 1.5f, "grass", 0);
 	Plane* water = new Plane(2, 1, "water", 1);
 	terrains.push_back(terrain);
 	terrains.push_back(water);
@@ -202,12 +205,23 @@ void setup(void)
 		terrains[i]->initVertexArray();
 		terrains[i]->normalCalc();
 	}
-
+	float percentage = 60.6f;
+	float randomNum;
 	for (int i = 0; i < MapSize * MapSize; i++){
-		if (terrains[0]->terrainVertices[i].coords.y > 6 && terrains[0]->terrainVertices[i].coords.y < 7) {
-
-			Tree* temp = new Tree(glm::vec3(terrains[0]->terrainVertices[i].coords.x, terrains[0]->terrainVertices[i].coords.y, terrains[0]->terrainVertices[i].coords.z));
-			trees.push_back(temp);
+		randomNum = random(0, 100);
+		if (terrains[0]->terrainVertices[i].coords.y > 0.1f){
+			if (terrains[0]->terrainVertices[i].coords.y >= 5.0f && terrains[0]->terrainVertices[i].coords.y <= 8.0f) {
+				percentage = 80.9f;
+			}
+			else if (terrains[0]->terrainVertices[i].coords.y > 8.0f) {
+				percentage = 99.9f;
+			}
+			if (randomNum <= percentage) {
+			}
+			else {
+				Tree* temp = new Tree(glm::vec3(terrains[0]->terrainVertices[i].coords.x, terrains[0]->terrainVertices[i].coords.y, terrains[0]->terrainVertices[i].coords.z));
+				trees.push_back(temp);
+			}
 		}
 	}
 	for (int i = 0; i < trees.size(); i++) {
@@ -264,7 +278,7 @@ void setup(void)
 	/////////////////////////
 	// Obtain projection matrix uniform location and set value.
 	projMatLoc = glGetUniformLocation(programId, "projMat");
-	projMat = perspective(radians(60.0), (double) SCREEN_WIDTH / (double)SCREEN_HEIGHT, 0.1, 100.0);
+	projMat = perspective(radians(60.0), (double) SCREEN_WIDTH / (double)SCREEN_HEIGHT, 0.1, 1000.0);
 	glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, value_ptr(projMat));
 	//////////////////////////////////////
 	
@@ -308,7 +322,7 @@ void drawScene(void)
 		if (type == 0) {
 			glUniform1i(glGetUniformLocation(programId, "Tex"), terrains[i]->textureIDs[0]);
 			glUniform1i(glGetUniformLocation(programId, "mudTex"), terrains[i]->textureIDs[1]);
-			glUniform1i(glGetUniformLocation(programId, "snowTex"), terrains[i]->textureIDs[2]);
+			glUniform1i(glGetUniformLocation(programId, "rockTex"), terrains[i]->textureIDs[2]);
 		}
 		else if (type == 1) {
 			glUniform1i(glGetUniformLocation(programId, "Tex"), terrains[i]->textureIDs.back());
@@ -336,6 +350,8 @@ void idle() {
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	if (deltaTime > 360.0f) {
 		deltaTime = 0.0f;
 	}
@@ -367,7 +383,8 @@ void keyInput(unsigned char key, int x, int y)
 	case 'r':
 		srand(time(NULL));
 		terrains[0]->calcHeight();
-	
+		terrains[0]->initVertexArray();
+		terrains[0]->normalCalc();
 		break;
 	case 27:
 		exit(0);

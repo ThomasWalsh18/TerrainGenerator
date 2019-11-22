@@ -9,7 +9,7 @@ out vec4 colorsExport;
 
 uniform sampler2D Tex;
 uniform sampler2D mudTex;
-uniform sampler2D snowTex;
+uniform sampler2D rockTex;
 
 struct Light
 {
@@ -41,34 +41,20 @@ void main(void)
 	vec4 texcol;
 	vec4 fieldTexColor = texture(Tex, texCoordsExport);
 	vec4 mudTexColor = texture(mudTex, texCoordsExport);
-	vec4 snowTexColor = texture(snowTex, texCoordsExport);
-	
+	vec4 rockTexColor = texture(rockTex, texCoordsExport);
+
 	if (Exportype == 0){
-		if (yheight.y <= 3.0f)
-		{
-			if (yheight.y >= 2.0f)
-			{
-				texcol = mix(fieldTexColor, mudTexColor, yheight.y / 10);
-			} 
-			else
-			{
-				texcol = mudTexColor;
-			}
-		} 
-		else if (yheight.y >= 3.0f && yheight.y <=8.0f)
-		{
-			if (yheight.y <= 7.0f)
-			{
-				texcol = fieldTexColor;	
-			} 
-			else
-			{
-				texcol = mix(snowTexColor, fieldTexColor, yheight.y / 10);
-			}
+		if (yheight.y <= 0){
+			texcol = mudTexColor;
 		}
-		else
-		{
-			texcol = snowTexColor;
+		if (yheight.y < 1 && yheight.y > 0){
+			texcol = mix(mudTexColor, fieldTexColor, yheight.y);
+		}		
+		if (yheight.y >=1 && yheight.y <=10){
+			texcol = mix(fieldTexColor, rockTexColor, yheight.y /10);
+		}
+		if (yheight.y > 10){
+			texcol = rockTexColor;
 		}
 	}
 	else 
@@ -83,7 +69,7 @@ void main(void)
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0f) * texcol * fAndBDif;  
 		colorsExport.a = 0.6f;
 	}else if (Exportype == 3){
-		colorsExport =  vec4(0.55f, 0.27f, 0.075f, 1.0f);
+		colorsExport =  vec4(0.45f, 0.27f, 0.075f, 1.0f);
 	}
 	else {
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0) * texcol * fAndBDif;  

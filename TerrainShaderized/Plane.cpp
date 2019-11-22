@@ -32,7 +32,7 @@ Plane::Plane(float randMax, float soft, std::string texName, int type)
 		this->loadTexture(Count, "mud");
 		this->textureIDs.push_back(Count);
 		Count++;
-		this->loadTexture(Count, "snowRock");
+		this->loadTexture(Count, "rock");
 		this->textureIDs.push_back(Count);
 		Count++;
 	}
