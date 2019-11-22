@@ -105,6 +105,11 @@ int oldTimeSinceStart;
 int newTimeSinceStart;
 vector<Plane*> terrains;
 vector<Tree*> trees;
+float random(float min, float max) {
+	float random = ((float)rand()) / RAND_MAX;
+	float range = max - min;
+	return (random * range) + min;
+}
 
 void mouseMove(int x, int y)
 {
@@ -200,6 +205,7 @@ void setup(void)
 
 	for (int i = 0; i < MapSize * MapSize; i++){
 		if (terrains[0]->terrainVertices[i].coords.y > 6 && terrains[0]->terrainVertices[i].coords.y < 7) {
+
 			Tree* temp = new Tree(glm::vec3(terrains[0]->terrainVertices[i].coords.x, terrains[0]->terrainVertices[i].coords.y, terrains[0]->terrainVertices[i].coords.z));
 			trees.push_back(temp);
 		}
@@ -267,7 +273,7 @@ void setup(void)
 
 	mat4 modelMat = mat4(1.0);
 	modelMatLoc = glGetUniformLocation(programId, "modelMat");
-	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
+	glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, value_ptr(modelMat));
 
 	normalMatLoc = glGetUniformLocation(programId, "normalMat");
 	normalMat = transpose(inverse(mat3(modelMat)));

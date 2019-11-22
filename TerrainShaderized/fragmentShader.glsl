@@ -82,6 +82,8 @@ void main(void)
 	if (Exportype == 1){
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0f) * texcol * fAndBDif;  
 		colorsExport.a = 0.6f;
+	}else if (Exportype == 3){
+		colorsExport =  vec4(0.55f, 0.27f, 0.075f, 1.0f);
 	}
 	else {
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0) * texcol * fAndBDif;  
