@@ -10,6 +10,8 @@ uniform mat4 projMat;
 uniform mat4 modelMat;
 uniform mat4 viewMat;
 
+uniform vec3 campos;
+
 uniform mat3 normalMat;
 uniform int type;
 uniform float time;
@@ -19,6 +21,8 @@ out vec2 texCoordsExport;
 out flat int Exportype;
 out vec4 yheight;
 
+out vec3 skyBoxTextures;
+
 
 void main(void)
 {
@@ -27,8 +31,9 @@ void main(void)
 	pos = terrainCoords;
 	if (type == 0){
 		yheight = pos;
-	}
-	if (type == 1){
+	} 
+	else if (type == 1)
+	{
 		//float amplitude = 1.;
 		//float frequency = 1.;
 		//pos.y += sin(pos.x * frequency);
@@ -40,12 +45,18 @@ void main(void)
 		//pos.y *= amplitude*0.06;
 		//pos.y += 0.1f * cos(pos.z + time);
 		pos.y += 0.2f * (sin(pos.x + time) + cos(pos.z + time));
-	}
-		
-	normalExport = terrainNormals;
-	//normalExport = normalize(normalMat * normalExport);
-	texCoordsExport = terrainTexCoords;
-	gl_Position = projMat * viewMat * modelMat * pos;
+	} 
 	
- 
+	if (type == 4){ // if you are the sky box
+		pos = projMat * viewMat * vec4(terrainCoords.x + campos.x, terrainCoords.y+ campos.y, terrainCoords.z + campos.z, 1.0f);// + vec4(campos.x, campos.y, campos.z, 1.0f);
+		gl_Position = pos.xyww;
+		skyBoxTextures = vec3(terrainCoords.x, terrainCoords.y, terrainCoords.z);
+	}
+	else 
+	{
+		normalExport = terrainNormals;
+		//normalExport = normalize(normalMat * normalExport);
+		texCoordsExport = terrainTexCoords;
+		gl_Position = projMat * viewMat * modelMat * pos;
+	}
 }

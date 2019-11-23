@@ -5,11 +5,15 @@ in vec2 texCoordsExport;
 in flat int Exportype;
 in vec4 yheight;
 
+in vec3 skyBoxTextures;
+
 out vec4 colorsExport;
 
 uniform sampler2D Tex;
 uniform sampler2D mudTex;
 uniform sampler2D rockTex;
+
+uniform samplerCube skybox;
 
 struct Light
 {
@@ -62,16 +66,23 @@ void main(void)
 		texcol = fieldTexColor;
 	}
 
+
 	normal = normalize(normalExport);
 	lightDirection = normalize(vec3(light0.coords));
 	fAndBDif = max(dot(normal, lightDirection), 0.0f) * (light0.difCols * terrainFandB.difRefl); 
 	if (Exportype == 1){
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0f) * texcol * fAndBDif;  
 		colorsExport.a = 0.6f;
-	}else if (Exportype == 3){
+	}
+	else if (Exportype == 3)
+	{
 		colorsExport =  vec4(0.45f, 0.27f, 0.075f, 1.0f);
 	}
-	else {
+	else if (Exportype == 4) { // if you are sky box
+		colorsExport =  texture(skybox, skyBoxTextures);
+	}
+	else 
+	{
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0) * texcol * fAndBDif;  
 		colorsExport.a = 1.0f;
 	}

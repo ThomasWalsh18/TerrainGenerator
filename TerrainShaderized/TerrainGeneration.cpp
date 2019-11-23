@@ -60,6 +60,52 @@ static const Light light0 = {
 };
 // Globals
 
+float skyboxVertices[] = {
+	// positions          
+	-1.0f,  1.0f, -1.0f, 
+	-1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+
+	-1.0f, -1.0f,  1.0f,
+	-1.0f, -1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f, -1.0f,
+	-1.0f,  1.0f,  1.0f,
+	-1.0f, -1.0f,  1.0f,
+
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+
+	-1.0f, -1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f, -1.0f,  1.0f,
+	-1.0f, -1.0f,  1.0f,
+
+	-1.0f,  1.0f, -1.0f,
+	 1.0f,  1.0f, -1.0f,
+	 1.0f,  1.0f,  1.0f,
+	 1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f,  1.0f,
+	-1.0f,  1.0f, -1.0f,
+
+	-1.0f, -1.0f, -1.0f,
+	-1.0f, -1.0f,  1.0f,
+	 1.0f, -1.0f, -1.0f,
+	 1.0f, -1.0f, -1.0f,
+	-1.0f, -1.0f,  1.0f,
+	 1.0f, -1.0f,  1.0f
+};
+
+
 // Size of the terrain
 //2^n +1
 const int SCREEN_WIDTH = 1600;
@@ -105,6 +151,7 @@ vector<Plane*> terrains;
 vector<Tree*> trees;
 
 vector<std::string> Skyfilenames;
+unsigned int skyboxVAO, skyboxVBO, cubemapTexture;
 
 float random(float min, float max) {
 	float random = ((float)rand()) / RAND_MAX;
@@ -190,9 +237,40 @@ void shaderCompileTest(GLuint shader)
 	cout << &vertShaderError[0] << endl;
 }
 
+unsigned int loadCubemap(vector<std::string> faces)
+{
+	BitMapFile* Skyimage;
+	unsigned int textureID;
+
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		std::string filePath = "./textures/" + faces[i] + ".bmp";
+		Skyimage = getbmp(filePath);
+		if (Skyimage)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, Skyimage->sizeX, Skyimage->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, Skyimage->data); // Skyimage[i]->sizeY stops the terrain from dre
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+		}
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
+}
+
 // Initialization routine.
 void setup(void)
 {
+
 	srand(time(NULL));
 	Plane* terrain = new Plane(30, 1.5f, "grass", 0);
 	Plane* water = new Plane(2, 1, "water", 1);
@@ -204,16 +282,16 @@ void setup(void)
 		terrains[i]->normalCalc();
 	}
 
-	float percentage = 60.6f;
+	float percentage = 60.666f;
 	float randomNum;
 	for (int i = 0; i < MapSize * MapSize; i++){
 		randomNum = random(0, 100);
 		if (terrains[0]->terrainVertices[i].coords.y > 0.1f){
 			if (terrains[0]->terrainVertices[i].coords.y >= 5.0f && terrains[0]->terrainVertices[i].coords.y <= 8.0f) {
-				percentage = 80.9f;
+				percentage = 80.999f;
 			}
 			else if (terrains[0]->terrainVertices[i].coords.y > 8.0f) {
-				percentage = 99.9f;
+				percentage = 99.999f;
 			}
 			if (randomNum <= percentage) {
 			}
@@ -227,7 +305,32 @@ void setup(void)
 		trees[i]->createTree();
 		trees[i]->buildIndex();
 	}
-	glClearColor(0.1, 0.4, 1.0, 0.0);
+	//glClearColor(0.1, 0.4, 1.0, 0.0);
+
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	/*
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	*/	
+	Skyfilenames.push_back("right");
+	Skyfilenames.push_back("left");
+	Skyfilenames.push_back("up");
+	Skyfilenames.push_back("down");
+	Skyfilenames.push_back("front");
+	Skyfilenames.push_back("back");
+	cubemapTexture = loadCubemap(Skyfilenames);
+
 
 	// Create shader program executable - read, compile and link shaders
 	char* vertexShader = readTextFile("vertexShader.glsl");
@@ -273,6 +376,7 @@ void setup(void)
 	for (int i = 0; i < trees.size(); i++) {
 		trees[i]->setupShaders();
 	}
+	
 
 	/////////////////////////
 	// Obtain projection matrix uniform location and set value.
@@ -335,6 +439,20 @@ void drawScene(void)
 		trees[i]->draw();
 	}
 
+
+	type = 4;
+	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+	glBindVertexArray(skyboxVAO);
+	glActiveTexture(GL_TEXTURE0); 
+	glUniform1i(glGetUniformLocation(programId, "type"), type);
+	glUniform3f(glGetUniformLocation(programId, "campos"), cameraPos.x, cameraPos.y, cameraPos.z);
+	//glUniform1i(glGetUniformLocation(programId, "skybox"), textureID - 1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	glDepthFunc(GL_LESS); // set depth function back to default
+	
+
 	glutSwapBuffers();
 }
 
@@ -350,6 +468,7 @@ void idle() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	if (deltaTime > 360.0f) {
 		deltaTime = 0.0f;
 	}
@@ -401,8 +520,6 @@ int main(int argc, char* argv[])
 	glutInitContextVersion(4, 3);
 	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
 	
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glutInitWindowPosition(100, 100);
