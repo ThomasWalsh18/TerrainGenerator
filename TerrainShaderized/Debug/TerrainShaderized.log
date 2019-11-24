@@ -1,25 +1,2 @@
-﻿  TerrainGeneration.cpp
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(171,11): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(172,11): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(178,10): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(179,10): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(204,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(205,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(209,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(210,17): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(253,21): warning C4101:  'nrChannels': unreferenced local variable
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(285,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(286,50): warning C4316:  'Plane': object allocated on the heap may not be aligned 16
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(287,44): warning C4316:  'Plane': object allocated on the heap may not be aligned 16
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(290,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(315,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(318,21): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(406,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(409,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(411,21): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(459,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(476,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(482,21): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(518,19): warning C4305:  '+=': truncation from 'double' to 'float'
-C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\TerrainGeneration.cpp(544,13): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  Leaf.cpp
   TerrainShaderized.vcxproj -> C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Debug\TerrainShaderized.exe
