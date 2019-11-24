@@ -10,6 +10,8 @@
 #include "getbmp.h"
 #include <vector>
 
+
+
 class Plane
 {
 	struct Vertex

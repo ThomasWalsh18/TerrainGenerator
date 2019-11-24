@@ -78,12 +78,12 @@ void main(void)
 	{
 		colorsExport =  vec4(0.45f, 0.27f, 0.075f, 1.0f);
 	}
-	else if (Exportype == 4) { // if you are sky box
-		colorsExport =  texture(skybox, skyBoxTextures);
-	}
 	else 
 	{
 		colorsExport =  vec4(vec3(min(fAndBDif, vec4(1.0))), 1.0) * texcol * fAndBDif;  
 		colorsExport.a = 1.0f;
+	} 
+	if (Exportype == 4) { // if you are sky box
+		colorsExport = texture(skybox, skyBoxTextures);
 	}
 }
