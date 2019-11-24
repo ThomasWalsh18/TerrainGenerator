@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="getbmp.cpp" />
+    <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="TerrainGeneration.cpp" />
     <ClCompile Include="Tree.cpp" />
@@ -97,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="getbmp.h" />
     <ClInclude Include="Contoller.h" />
+    <ClInclude Include="Leaf.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Tree.h" />
   </ItemGroup>

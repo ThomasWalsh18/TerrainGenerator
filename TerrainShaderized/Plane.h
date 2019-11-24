@@ -10,7 +10,7 @@
 #include "getbmp.h"
 #include <vector>
 
-
+#include <SOIL/SOIL.h>
 
 class Plane
 {

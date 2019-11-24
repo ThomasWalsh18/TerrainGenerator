@@ -11,7 +11,7 @@
 #include "Tree.h"
 #include "Plane.h"
 
-#include "SOIL/SOIL.h"
+#include <SOIL/SOIL.h>
 
 
 #pragma comment(lib, "glew32.lib") 
@@ -163,7 +163,7 @@ float random(float min, float max) {
 	float range = max - min;
 	return (random * range) + min;
 }
-//http://www.custommapmakers.org/skyboxes.php, http://www.mbsoftworks.sk/tutorials/opengl4/017-heightmap-pt2-from-image-and-skybox/
+//http://www.custommapmakers.org/skyboxes.php,
 void mouseMove(int x, int y)
 {
 	if (firstMouse)
@@ -256,15 +256,15 @@ unsigned int loadCubemap(vector<std::string> faces)
 		std::string filePath = "./textures/" + faces[i] + ".png";
 		Skyimage = SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
 		//Skyimage = getbmp(filePath);
-		//if (Skyimage != 0)
-		//{
+		if (Skyimage != 0)
+		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, Skyimage); // Skyimage[i]->sizeY stops the terrain from dre
-		//}
-		//else
-		//{
-		//	std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-		//}
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, Skyimage);
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+		}
 	}
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -293,13 +293,13 @@ void setup(void)
 		terrains[i]->normalCalc();
 	}
 
-	float percentage = 60.666f;
+	float percentage = 70.666f;
 	float randomNum;
 	for (int i = 0; i < MapSize * MapSize; i++){
 		randomNum = random(0, 100);
 		if (terrains[0]->terrainVertices[i].coords.y > 0.1f){
 			if (terrains[0]->terrainVertices[i].coords.y >= 5.0f && terrains[0]->terrainVertices[i].coords.y <= 8.0f) {
-				percentage = 80.999f;
+				percentage = 88.999f;
 			}
 			else if (terrains[0]->terrainVertices[i].coords.y > 8.0f) {
 				percentage = 99.999f;
@@ -315,9 +315,11 @@ void setup(void)
 	for (int i = 0; i < trees.size(); i++) {
 		trees[i]->createTree();
 		trees[i]->buildIndex();
+		for (int j = 0; j < trees[i]->leaves.size(); j++) {
+			trees[i]->leaves[j]->buildIndex();
+		}
 	}
 	//glClearColor(0.1, 0.4, 1.0, 0.0);
-	/*
 	m_texture = SOIL_load_OGL_cubemap
 	(
 		"./textures/test.png",
@@ -330,15 +332,16 @@ void setup(void)
 		SOIL_CREATE_NEW_ID,
 		0
 	);
+	/*
 	*/
 
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
 	/*
+	Skyfilenames.push_back("test");
+	Skyfilenames.push_back("test");
+	Skyfilenames.push_back("test");
+	Skyfilenames.push_back("test");
+	Skyfilenames.push_back("test");
+	Skyfilenames.push_back("test");
 	Skyfilenames.push_back("right");
 	Skyfilenames.push_back("left");
 	Skyfilenames.push_back("up");
@@ -360,9 +363,6 @@ void setup(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(0);
-
-
-
 
 	// Create shader program executable - read, compile and link shaders
 	char* vertexShader = readTextFile("vertexShader.glsl");
@@ -408,6 +408,9 @@ void setup(void)
 	}
 	for (int i = 0; i < trees.size(); i++) {
 		trees[i]->setupShaders();
+		for (int j = 0; j < trees[i]->leaves.size(); j++) {
+			trees[i]->leaves[j]->setupShaders();
+		}
 	}
 	
 
@@ -449,6 +452,8 @@ void drawScene(void)
 	else {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	// For each row - draw the triangle strip
 	int type = 0;
 	for (int i = 0; i < terrains.size(); i++) {
@@ -466,10 +471,17 @@ void drawScene(void)
 		terrains[i]->draw();
 		type++;
 	}
-	type = 3;
+	glDisable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 	for (int i = 0; i < trees.size(); i++) {
+		type = 3;
 		glUniform1i(glGetUniformLocation(programId, "type"), type);
 		trees[i]->draw();
+		type = 5;
+		glUniform1i(glGetUniformLocation(programId, "type"), type);
+		for (int j = 0; j < trees[i]->leaves.size(); j++) {
+			trees[i]->leaves[j]->draw();
+		}
 	}
 
 
@@ -485,7 +497,6 @@ void drawScene(void)
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	glDepthFunc(GL_LESS); // set depth function back to default
-
 	glutSwapBuffers();
 }
 
@@ -499,8 +510,7 @@ void idle() {
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+
 
 	if (deltaTime > 360.0f) {
 		deltaTime = 0.0f;

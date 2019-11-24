@@ -1,10 +1,6 @@
 #include "Tree.h"
 
 float Tree::random(float min, float max) {
-	/*	std::uniform_int_distribution<> range(min, max);
-	int number = range(gen);
-	//cout << "Random number between " << min << " & " << max << " is: " << number << endl;
-	return number;*/
 	float random = ((float)rand()) / RAND_MAX;
 	float range = max - min;
 	return (random * range) + min;
@@ -46,7 +42,6 @@ void Tree::draw()
 	glDrawElements(GL_LINES, branchIndexDataVector.size(), GL_UNSIGNED_INT, &branchIndexDataVector[0]);
 
 	glFlush();
-
 }
 
 void Tree::setupShaders()
@@ -64,52 +59,47 @@ void Tree::setupShaders()
 	///////////////////////////////////////
 }
 
-void Tree::computeSingleBranch(float angle, float x0, float y0, float x1, float y1, float& x2, float& y2)
+void Tree::computeSingleBranch(int depth, float angle, float x0, float y0,float z0, float x1, float y1, float z1, float& x2, float& y2, float &z2)
 {
-	/*
-	float xs, ys, zs, xll, yll, zll, xl, yl, zl, m;
+	float R = random(60, 90) / 100;
+	float xs, ys, zs, xll, yll, zll, xl, yl, zl, m; 
 	double val;
-	xs = (x1 - x0) * R;
-	ys = (y1 - y0) * R;
-	//zs = (z1 - z0) * R;
+
+	xs = (x1 - x0) * R; 
+	ys = (y1 - y0) * R; 
+	zs = (z1 - z0) * R;
 
 	m = sqrt(xs * xs + ys * ys + zs * zs);
 
 	xll = cos(angle / 2.0) * xs - sin(angle / 2.0) * ys;
 	yll = sin(angle / 2.0) * xs + cos(angle / 2.0) * ys;
-	zll = 0.0;
+	zll = 0.0f;
 
-	//roate around angle / 2.0 + 3.1415926/2.0 in other axis  srand(3);
-
+	//roate around angle / 2.0 + 3.1415926/2.0 in other axis  
+	srand(time(NULL)); // get different srand values
+	if (depth % 2 == 0) {
+		val = -2.0; 
+	}
+	else {
+		val = 2.0;
+	}
 	xl = cos(val * angle / 2.0) * xll - sin(val * angle / 2.0) * zll;
-	yl = yll;
+	yl = yll; 
 	zl = sin(val * angle / 2.0) * xll + cos(val * angle / 2.0) * zll;
 
 	x2 = x1 + xl;
 	y2 = y1 + yl;
-	//z2 = z1 + zl;
-	*/
-
-	float R = random(60, 90) / 100;
-
-	if (R < 0.6f) {
-		R = 0.6f;
-	}
-	float xs, ys, xl, yl;
-	xs = (x1 - x0) * R;
-	ys = (y1 - y0) * R;
-	xl = cos(angle / 2.0) * xs - sin(angle / 2.0) * ys;
-	yl = sin(angle / 2.0) * xs + cos(angle / 2.0) * ys;
-	x2 = x1 + xl;  y2 = y1 + yl;
-
+	z2 = z1 + zl;
 }
-void Tree::recurComputeBranch(int depth, int index, float angle, std::vector<glm::vec2> BasePts, std::vector<glm::vec2> BrPts)
+void Tree::recurComputeBranch(int depth, int index, float angle, std::vector<glm::vec3> BasePts, std::vector<glm::vec3> BrPts)
 {
 	float x2, y2, z2;
-	glm::vec2 ttPt;
-	std::vector<glm::vec2> NewBasePts, NewBrPts;
+	glm::vec3 ttPt;
+	std::vector<glm::vec3> NewBasePts, NewBrPts;
 
 	if (depth > this->MAXLEVEL) { // done all the points
+		Leaf* tempLeaf = new Leaf(BrPts[0]);
+		leaves.push_back(tempLeaf);
 		return;
 	}
 	else {
@@ -120,27 +110,39 @@ void Tree::recurComputeBranch(int depth, int index, float angle, std::vector<glm
 		else {
 			for (int i = 0; i < size; i++) {
 				angle = glm::radians(random(30, 50));
-				computeSingleBranch(angle, BasePts[i].x, BasePts[i].y, BrPts[i].x, BrPts[i].y, x2, y2);
+				computeSingleBranch(depth,angle, BasePts[i].x, BasePts[i].y, BasePts[i].z, BrPts[i].x, BrPts[i].y, BrPts[i].z, x2, y2, z2);
 				TrunkVertices[index].coords[0] = x2;
 				TrunkVertices[index].coords[1] = y2;
-				TrunkVertices[index].coords[2] = base1.z;
+				if (depth == 0) {
+					TrunkVertices[index].coords[2] = BasePts[i].z;
+				}
+				else {
+					TrunkVertices[index].coords[2] = z2;
+				}
 				TrunkVertices[index].coords[3] = 1.0;
 				index++;
 				NewBasePts.push_back(BrPts[i]);
 				ttPt.x = x2;
 				ttPt.y = y2;
-
+				ttPt.z = z2;
 				NewBrPts.push_back(ttPt);
+
 				angle = glm::radians(random(30, 50));
-				computeSingleBranch(-angle, BasePts[i].x, BasePts[i].y, BrPts[i].x, BrPts[i].y, x2, y2);
+				computeSingleBranch(depth ,-angle, BasePts[i].x, BasePts[i].y, BasePts[i].z, BrPts[i].x, BrPts[i].y, BrPts[i].z, x2, y2, z2);
 				TrunkVertices[index].coords[0] = x2;
 				TrunkVertices[index].coords[1] = y2;
-				TrunkVertices[index].coords[2] = base1.z;
+				if (depth == 0) {
+					TrunkVertices[index].coords[2] = BasePts[i].z;
+				}
+				else {
+					TrunkVertices[index].coords[2] = z2;
+				}
 				TrunkVertices[index].coords[3] = 1.0;
 				index++;
 				NewBasePts.push_back(BrPts[i]);
 				ttPt.x = x2;
 				ttPt.y = y2;
+				ttPt.z = z2;
 				NewBrPts.push_back(ttPt);
 			}
 			depth++;
@@ -154,8 +156,8 @@ void Tree::createTree() {
 	srand(time(NULL));
 	float angle = glm::radians(random(30, 50));
 
-	glm::vec2 ttPt;
-	std::vector<glm::vec2> BasePts, BranchPts;
+	glm::vec3 ttPt;
+	std::vector<glm::vec3> BasePts, BranchPts;
 
 	for (int i = 0; i < NUMPOINTS; i++) {
 		TrunkVertices[i].colors[0] = 0.55;
@@ -170,6 +172,7 @@ void Tree::createTree() {
 	TrunkVertices[0].coords[3] = 1.0;
 	ttPt.x = TrunkVertices[0].coords[0];//x0
 	ttPt.y = TrunkVertices[0].coords[1]; //y0 
+	ttPt.z = TrunkVertices[0].coords[2]; //y0 
 	BasePts.push_back(ttPt);
 
 	TrunkVertices[1].coords[0] = this->base1.x;
@@ -178,6 +181,7 @@ void Tree::createTree() {
 	TrunkVertices[1].coords[3] = 1.0;
 	ttPt.x = TrunkVertices[1].coords[0]; //x1 
 	ttPt.y = TrunkVertices[1].coords[1]; //y2  
+	ttPt.z = TrunkVertices[1].coords[2]; //y2  
 	BranchPts.push_back(ttPt);
 
 	index = 2;

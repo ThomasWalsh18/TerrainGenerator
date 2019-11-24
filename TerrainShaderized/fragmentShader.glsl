@@ -86,4 +86,7 @@ void main(void)
 	if (Exportype == 4) { // if you are sky box
 		colorsExport = texture(skybox, skyBoxTextures);
 	}
+	if (Exportype == 5) { // if you are leaf
+		colorsExport = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	}
 }
