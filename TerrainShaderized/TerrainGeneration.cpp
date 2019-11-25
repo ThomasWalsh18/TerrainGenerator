@@ -540,7 +540,7 @@ void keyInput(unsigned char key, int x, int y)
 		cameraPos = glm:: vec3(59.0f, 121.0f, 66.0f);
 		cameraFront = vec3(-0.017450, -0.999848, -0.000274);
 		break;
-	case 'y':
+	case 'y': 
 		// side view
 		cameraPos = vec3(-2.865140, 40.813656, -6.744401);
 		cameraFront = vec3(0.558701, -0.526956, 0.640446);

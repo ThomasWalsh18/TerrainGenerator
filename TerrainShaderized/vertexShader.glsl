@@ -48,8 +48,7 @@ void main(void)
 	} 
 	
 	if (type == 4){ // if you are the sky box
-		pos = projMat * viewMat * vec4(terrainCoords.x + campos.x, terrainCoords.y+ campos.y, terrainCoords.z + campos.z, 1.0f);// + vec4(campos.x, campos.y, campos.z, 1.0f);
-		//pos = projMat * viewMat * vec4(terrainCoords.x, terrainCoords.y, terrainCoords.z , 1.0f);// + vec4(campos.x, campos.y, campos.z, 1.0f);
+		pos = projMat * viewMat * vec4(terrainCoords.x + campos.x, terrainCoords.y+ campos.y, terrainCoords.z + campos.z, 1.0f);
 		gl_Position = pos.xyww;
 		skyBoxTextures = vec3(terrainCoords.x, terrainCoords.y, terrainCoords.z);
 	}
