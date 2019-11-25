@@ -2,10 +2,11 @@
 
 Leaf::Leaf(glm::vec3 base1)
 {
-	//srand(time(NULL));
-	float angle = random(-1.0f, 1.0f);
-	float radi = random(0.3f, 0.6f);
-	float height = random(0.2f, 0.6f);
+	srand(time(NULL));
+	float num = random(0, 1);
+	float angle = random(-5.0f, 5.0f) / 10;
+	float radi = random(3.0f, 6.0f) / 10;
+	float height = random(1.0f, 3.0f) / 10;
 
 	this->base1 = base1;
 	this->base2 = base1 + glm::vec3(radi, height, angle);

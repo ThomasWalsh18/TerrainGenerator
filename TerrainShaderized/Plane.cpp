@@ -1,4 +1,5 @@
 #include "Plane.h"
+#include <SOIL/SOIL.h>
 
 float Plane::randomGen(float min, float max)
 {
@@ -66,11 +67,15 @@ void Plane::loadTexture(int textureID, std::string name)
 {
 	std::string filePath = "./textures/" + name + ".bmp";
 	image = getbmp(filePath);
+	//filePath = "./textures/test.png";
+	//int width, height;
+	//unsigned char* image = SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
 	glGenTextures(1, &texture);
 
 	glActiveTexture(GL_TEXTURE0 + textureID);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->sizeX, image->sizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width,height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

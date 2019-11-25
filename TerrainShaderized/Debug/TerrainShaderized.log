@@ -1,2 +1,3 @@
 ﻿  Leaf.cpp
-  TerrainShaderized.vcxproj -> C:\Users\tomth\Desktop\CW2\322\TerrainShaderized\Debug\TerrainShaderized.exe
+C:\Users\walsht.COVENTRY\Desktop\322\TerrainShaderized\Leaf.cpp(5,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  TerrainShaderized.vcxproj -> C:\Users\walsht.COVENTRY\Desktop\322\TerrainShaderized\Debug\TerrainShaderized.exe

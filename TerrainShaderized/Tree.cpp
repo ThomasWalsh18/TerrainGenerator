@@ -98,8 +98,10 @@ void Tree::recurComputeBranch(int depth, int index, float angle, std::vector<glm
 	std::vector<glm::vec3> NewBasePts, NewBrPts;
 
 	if (depth > this->MAXLEVEL) { // done all the points
-		Leaf* tempLeaf = new Leaf(BrPts[0]);
-		leaves.push_back(tempLeaf);
+		//for (int i = 0; i < BrPts.size(); i++) {
+			Leaf* tempLeaf = new Leaf(BrPts[0]);
+			leaves.push_back(tempLeaf);
+		//}
 		return;
 	}
 	else {

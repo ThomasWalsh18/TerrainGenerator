@@ -250,16 +250,19 @@ unsigned int loadCubemap(vector<std::string> faces)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
 	unsigned char* Skyimage;
-	int width, height, nrChannels;
+	int width, height;
+
 	for (unsigned int i = 0; i < faces.size(); i++)
 	{
-		std::string filePath = "./textures/" + faces[i] + ".png";
-		Skyimage = SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
+		std::string filePath = "./textures/skybox/" + faces[i] + ".jpg";
+		Skyimage = SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 		//Skyimage = getbmp(filePath);
 		if (Skyimage != 0)
 		{
+			//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				//0, GL_RGBA, Skyimage->sizeX, Skyimage->sizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, Skyimage->data);
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, Skyimage);
+				0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, Skyimage);
 		}
 		else
 		{
@@ -320,50 +323,24 @@ void setup(void)
 		}
 	}
 	//glClearColor(0.1, 0.4, 1.0, 0.0);
-	m_texture = SOIL_load_OGL_cubemap
-	(
-		"./textures/test.png",
-		"./textures/test.png",
-		"./textures/test.png",
-		"./textures/test.png",
-		"./textures/test.png",
-		"./textures/test.png",
-		SOIL_LOAD_RGB,
-		SOIL_CREATE_NEW_ID,
-		0
-	);
-	/*
-	*/
 
 	/*
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("test");
-	Skyfilenames.push_back("right");
-	Skyfilenames.push_back("left");
-	Skyfilenames.push_back("up");
-	Skyfilenames.push_back("down");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	Skyfilenames.push_back("rock");
+	*/
+	
 	Skyfilenames.push_back("front");
 	Skyfilenames.push_back("back");
-	*/
+	Skyfilenames.push_back("up");
+	Skyfilenames.push_back("down");
+	Skyfilenames.push_back("right");
+	Skyfilenames.push_back("left");
+	
 	m_texture = loadCubemap(Skyfilenames);
-	glGenVertexArrays(1, &skyboxVAO);
-	glBindVertexArray(skyboxVAO);
-
-	glGenBuffers(1, &skyboxVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)(sizeof(float) * 0));
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-
 	// Create shader program executable - read, compile and link shaders
 	char* vertexShader = readTextFile("vertexShader.glsl");
 	vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
@@ -413,6 +390,20 @@ void setup(void)
 		}
 	}
 	
+	glGenVertexArrays(1, &skyboxVAO);
+	glBindVertexArray(skyboxVAO);
+
+	glGenBuffers(1, &skyboxVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)(sizeof(float) * 0));
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(0);
+
 
 	/////////////////////////
 	// Obtain projection matrix uniform location and set value.
@@ -490,9 +481,11 @@ void drawScene(void)
 	type = 4;
 	glUniform1i(glGetUniformLocation(programId, "type"), type);
 	glUniform3f(glGetUniformLocation(programId, "campos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+
 	glBindVertexArray(skyboxVAO);
-	glActiveTexture(GL_TEXTURE0); 
-//	glUniform1i(glGetUniformLocation(programId, "skybox"), m_texture);
+	glActiveTexture(GL_TEXTURE0 + 5); 
+	glUniform1i(glGetUniformLocation(programId, "skybox"), m_texture);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_texture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
