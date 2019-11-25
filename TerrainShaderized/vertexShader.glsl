@@ -58,6 +58,13 @@ void main(void)
 		normalExport = terrainNormals;
 		//normalExport = normalize(normalMat * normalExport);
 		texCoordsExport = terrainTexCoords;
-		gl_Position = projMat * viewMat * modelMat * pos;
+		if (type == 5) {
+			vec4 repeat;
+				repeat = vec4(pos.x + gl_InstanceID / 2, pos.y + sin(gl_InstanceID), pos.z , pos.w);
+	
+			gl_Position = projMat * viewMat * modelMat * repeat;
+		} else {
+			gl_Position = projMat * viewMat * modelMat * pos;
+		}
 	}
 }

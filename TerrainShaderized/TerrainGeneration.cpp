@@ -10,7 +10,7 @@
 #include <time.h>
 #include "Tree.h"
 #include "Plane.h"
-
+#include "glm/gtx/string_cast.hpp"
 #include <SOIL/SOIL.h>
 
 
@@ -139,8 +139,8 @@ bool debugMode = false;
 float speed = 3;
 vec3 los = glm::vec3(0.0f, 0.0f, -1.0f);
 vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-vec3 cameraPos = glm::vec3(0.0f, 0.0f, 10.0f);
-vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
+vec3 cameraPos = glm::vec3(60.0f, 20.0f, 51.0f);
+vec3 cameraFront = glm::vec3(0.0f, -0.45f, 0.89f);
 
 bool firstMouse = true;
 float Yaw = 90.0f;	
@@ -163,7 +163,7 @@ float random(float min, float max) {
 	float range = max - min;
 	return (random * range) + min;
 }
-//http://www.custommapmakers.org/skyboxes.php,
+
 void mouseMove(int x, int y)
 {
 	if (firstMouse)
@@ -210,8 +210,10 @@ void mouseMove(int x, int y)
 		lastY = win_h / 2;
 		glutWarpPointer(win_w / 2, win_h / 2);
 	}
-	//std::cout << "cameraFront" << glm::to_string(cameraFront) << std::endl;
-	//std::cout << "Camera pos" << glm::to_string(cameraPos) << std::endl;
+	if (debugMode) {
+		std::cout << "Camera pos :: " << glm::to_string(cameraPos) << std::endl;
+		std::cout << "cameraFront :: " << glm::to_string(cameraFront) << std::endl;
+	}
 }
 
 // Function to read text file, used to read shader files
@@ -533,12 +535,21 @@ void keyInput(unsigned char key, int x, int y)
 	case 'c':
 		debugMode = !debugMode;
 		break;	
-	case 'r':
-		srand(time(NULL));
-		terrains[0]->calcHeight();
-		terrains[0]->initVertexArray();
-		terrains[0]->normalCalc();
+	case 't':
+		// top down
+		cameraPos = glm:: vec3(59.0f, 121.0f, 66.0f);
+		cameraFront = vec3(-0.017450, -0.999848, -0.000274);
 		break;
+	case 'y':
+		// side view
+		cameraPos = vec3(-2.865140, 40.813656, -6.744401);
+		cameraFront = vec3(0.558701, -0.526956, 0.640446);
+		break;	
+	case 'u':
+		// reset view
+		cameraPos = glm::vec3(60.0f, 20.0f, 51.0f);
+		cameraFront = glm::vec3(0.0f, -0.45f, 0.89f);
+		break;	
 	case 27:
 		exit(0);
 		break;

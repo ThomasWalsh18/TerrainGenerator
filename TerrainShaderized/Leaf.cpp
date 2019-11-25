@@ -62,7 +62,8 @@ void Leaf::setupShaders()
 void Leaf::draw()
 {
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4,  10);
 	glFlush();
 }
 
