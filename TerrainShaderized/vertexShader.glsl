@@ -44,7 +44,7 @@ void main(void)
 		//pos.y += sin(pos.x*frequency*4.0+ t*4.0)*2.0;
 		//pos.y *= amplitude*0.06;
 		//pos.y += 0.1f * cos(pos.z + time);
-		pos.y += 0.2f * (sin(pos.x + time) + cos(pos.z + time));
+		pos.y = 0.2f * (sin(pos.x + time) + cos(pos.z + time));
 	} 
 	
 	if (type == 4){ // if you are the sky box
