@@ -75,7 +75,6 @@ void Tree::computeSingleBranch(int depth, float angle, float x0, float y0,float 
 	yll = sin(angle / 2.0) * xs + cos(angle / 2.0) * ys;
 	zll = 0.0f;
 
-	//roate around angle / 2.0 + 3.1415926/2.0 in other axis  
 	srand(time(NULL)); // get different srand values
 	if (depth % 2 == 0) {
 		val = -2.0; 
@@ -98,8 +97,8 @@ void Tree::recurComputeBranch(int depth, int index, float angle, std::vector<glm
 	std::vector<glm::vec3> NewBasePts, NewBrPts;
 
 	if (depth > this->MAXLEVEL) { // done all the points
-		//for (int i = 0; i < BrPts.size(); i++) {
-			Leaf* tempLeaf = new Leaf(BrPts[0]);
+		//for (int i = 0; i < BrPts.size(); i++) { // this could be done to create as many leaves as there is branches, however this becomes very laggy
+			Leaf* tempLeaf = new Leaf(BrPts[0]);//BrPts[i];
 			leaves.push_back(tempLeaf);
 		//}
 		return;
@@ -188,5 +187,4 @@ void Tree::createTree() {
 
 	index = 2;
 	recurComputeBranch(0, index, angle, BasePts, BranchPts);
-	//create leaf vertices 
 }

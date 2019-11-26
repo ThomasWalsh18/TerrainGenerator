@@ -1,16 +1,6 @@
 #pragma once
+// Size of the terrain has to be 
+//2^n +1
 const int MapSize = 129;
-//static unsigned int vao, buffer;
 static int Count = 0;
 const int NUMPOINTS = 1000;
-
-
-/*
-float random(float min) {
-	int max = min * -2000.0f;
-	min = min * 1000.0f;
-	float number = float((((rand() % max)) + min) / 1000.0f);
-	//cout << "Random number between " << min/1000 << " & "<< rand_max << " is: " << number << endl;
-	return number;
-}
-*/

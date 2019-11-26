@@ -3,14 +3,6 @@
 
 float Plane::randomGen(float min, float max)
 {
-	/*
-	min = min * 1000.0f;
-	max = max * 1000.0f;
-	std::uniform_int_distribution<> range(min, max);
-	float number = range(gen) / 1000.0f;
-	//std::cout << "Random number between " << min << " & " << max << " is: " << number << std::endl;
-	return number;
-	*/
 	float random = ((float)rand()) / RAND_MAX;
 	float range = max - min;
 	return (random * range) + min;
@@ -67,24 +59,16 @@ void Plane::loadTexture(int textureID, std::string name)
 {
 	std::string filePath = "./textures/" + name + ".bmp";
 	image = getbmp(filePath);
-	//filePath = "./textures/test.png";
-	//int width, height;
-	//unsigned char* image = SOIL_load_image(filePath.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
 	glGenTextures(1, &texture);
 
 	glActiveTexture(GL_TEXTURE0 + textureID);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->sizeX, image->sizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width,height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	/*grassTexLoc = glGetUniformLocation(programId, "grassTex");
-	glUniform1i(grassTexLoc, 0);*/
 }
 
 void Plane::calcHeight()
@@ -194,11 +178,6 @@ void Plane::initVertexArray() {
 
 void Plane::normalCalc()
 {
-	//for each point get three indexs
-	//then cross between these indexs 
-	//then if the x index is odd do the cross the other way around 
-	//then if the normal is less than a certain ammount flip it
-
 	for (int z = 0; z < MapSize - 1; z++)
 	{
 		for (int x = 0; x < MapSize * 2 - 2; x++) {

@@ -62,9 +62,9 @@ static const Light light0 = {
 	vec4(1.0f, 1.0f, 1.0f, 1.0f),
 	vec4(1.0f, 10.0f, 0.0f, 0.0f)
 };
-// Globals
+
 float skyboxVertices[] = {
-	// positions          
+	// positions for sky box verticeis          
 	-1.0f,  1.0f, -1.0f, 
 	-1.0f, -1.0f, -1.0f,
 	 1.0f, -1.0f, -1.0f,
@@ -108,16 +108,13 @@ float skyboxVertices[] = {
 	 1.0f, -1.0f,  1.0f
 };
 
-
-// Size of the terrain
-//2^n +1
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
 
 static mat4 projMat = mat4(1.0);
 static mat3 normalMat = mat3(1.0);
 static mat4 viewMat(1.0f);;
-static mat4 modelMat(1.0f); // Identity matrix  4 x 4
+static mat4 modelMat(1.0f);
 
 static const vec4 globAmb = vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
@@ -284,9 +281,6 @@ unsigned int loadCubemap(vector<std::string> faces)
 // Initialization routine.
 void setup(void)
 {
-//	unsigned int image = SOIL_load_OGL_texture("./textures/test.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MULTIPLY_ALPHA);
-
-
 	srand(time(NULL));
 	Plane* terrain = new Plane(30, 1.5f, "grass", 0);
 	Plane* water = new Plane(2, 1, "water", 1);
@@ -324,16 +318,8 @@ void setup(void)
 			trees[i]->leaves[j]->buildIndex();
 		}
 	}
+	// A flat background colour
 	//glClearColor(0.1, 0.4, 1.0, 0.0);
-
-	/*
-	Skyfilenames.push_back("rock");
-	Skyfilenames.push_back("rock");
-	Skyfilenames.push_back("rock");
-	Skyfilenames.push_back("rock");
-	Skyfilenames.push_back("rock");
-	Skyfilenames.push_back("rock");
-	*/
 	
 	Skyfilenames.push_back("front");
 	Skyfilenames.push_back("back");
@@ -464,8 +450,7 @@ void drawScene(void)
 		terrains[i]->draw();
 		type++;
 	}
-	glDisable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glDisable(GL_CULL_FACE); // Disable backface cull for leaves so they can be seen from all angles
 	for (int i = 0; i < trees.size(); i++) {
 		type = 3;
 		glUniform1i(glGetUniformLocation(programId, "type"), type);
@@ -495,7 +480,6 @@ void drawScene(void)
 	glutSwapBuffers();
 }
 
-// OpenGL window reshape routine.
 void resize(int w, int h)
 {
 	glViewport(0, 0, w, h);
@@ -514,7 +498,6 @@ void idle() {
 	glutPostRedisplay();
 }
 
-// Keyboard input processing routine.
 void keyInput(unsigned char key, int x, int y)
 {
 	float cameraSpeed = 1;
@@ -556,11 +539,8 @@ void keyInput(unsigned char key, int x, int y)
 	default:
 		break;
 	}
-	//glutSwapBuffers();
 }
 
-
-// Main routine.
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
@@ -568,7 +548,6 @@ int main(int argc, char* argv[])
 	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-//	glEnable(GL_TEXTURE_2D);
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("TerrainGeneration");

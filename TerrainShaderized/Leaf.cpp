@@ -62,7 +62,7 @@ void Leaf::setupShaders()
 void Leaf::draw()
 {
 	glBindVertexArray(vao);
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // a non instanced draw line
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4,  10);
 	glFlush();
 }
